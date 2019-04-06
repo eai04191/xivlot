@@ -14,8 +14,17 @@ import (
 
 func main() {
 	username := os.Getenv("USERNAME")
-	path := prompter.Prompt("Enter ACT log path", "C:\\Users\\"+username+"\\AppData\\Roaming\\Advanced Combat Tracker\\FFXIVLogs\\")
-	name := prompter.Prompt("Character Name", "Your Name")
+	lang := prompter.Choose("FFXIV Language", []string{"JA", "EN"}, "JA")
+	path := prompter.Prompt("ACT Log Path", "C:\\Users\\"+username+"\\AppData\\Roaming\\Advanced Combat Tracker\\FFXIVLogs\\")
+	var name string
+	if lang != "EN" {
+		name = prompter.Prompt("Character Name", "Your Name")
+	}
+
+	regexPatterns := map[string]string{
+		"JA": name + `は.*に(GREED|NEED)のダイスで(\d{1,3})を出した。.*$`,
+		"EN": `You roll (Greed|Need) on the .*\. (\d{1,3})!`,
+	}
 
 	var rolls []int
 
@@ -35,9 +44,7 @@ func main() {
 		scanner := bufio.NewScanner(f)
 
 		for scanner.Scan() {
-			// 一行ずつ処理
-
-			r := regexp.MustCompile(name + `は.*に(GREED|NEED)のダイスで(\d{1,3})を出した。.*$`)
+			r := regexp.MustCompile(regexPatterns[lang])
 			if r.MatchString(scanner.Text()) {
 				match := r.FindStringSubmatch(scanner.Text())
 				log.Print("Found: " + match[2])
