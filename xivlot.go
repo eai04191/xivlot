@@ -23,7 +23,7 @@ func main() {
 
 	regexPatterns := map[string]string{
 		"JA": name + `は.*に(GREED|NEED)のダイスで(\d{1,3})を出した。.*$`,
-		"EN": `You roll (Greed|Need) on the .*\. (\d{1,3})!`,
+		"EN": `You roll (Greed|Need) on the .*\. (\d{1,3})!.*$`,
 	}
 
 	var rolls []int
