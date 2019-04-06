@@ -7,12 +7,36 @@ import (
 	"log"
 	"os"
 	"regexp"
+	"sort"
 	"strconv"
 
 	"github.com/Songmu/prompter"
+	"github.com/dustin/go-humanize"
 )
 
+func sum(s []int) int {
+	var sum int
+	for _, x := range s {
+		sum += x
+	}
+	return sum
+}
+
+func max(s []int) int {
+	sort.Sort(sort.Reverse(sort.IntSlice(s)))
+	return s[0]
+}
+
+func min(s []int) int {
+	sort.Sort(sort.IntSlice(s))
+	return s[0]
+}
+
 func main() {
+	scan()
+}
+
+func scan() {
 	username := os.Getenv("USERNAME")
 	lang := prompter.Choose("FFXIV Language", []string{"JA", "EN"}, "JA")
 	path := prompter.Prompt("ACT Log Path", "C:\\Users\\"+username+"\\AppData\\Roaming\\Advanced Combat Tracker\\FFXIVLogs\\")
@@ -55,16 +79,28 @@ func main() {
 
 	}
 
-	sum := 0
-	for _, x := range rolls {
-		sum += x
-	}
+	show(rolls)
+}
 
-	average := sum / len(rolls)
-
+func show(rolls []int) {
 	fmt.Println("")
 	fmt.Println("Result")
-	fmt.Println("Rolls Count:", len(rolls), "times")
-	fmt.Println("Average:", average)
-	prompter.Prompt("", "")
+
+	fmt.Printf("%20s", "Total Rolls: ")
+	fmt.Println(humanize.Comma(int64(len(rolls))), "times")
+
+	fmt.Printf("%20s", "Sum: ")
+	fmt.Println(humanize.Comma(int64(sum(rolls))))
+
+	fmt.Printf("%20s", "Max: ")
+	fmt.Println(max(rolls))
+
+	fmt.Printf("%20s", "Min: ")
+	fmt.Println(min(rolls))
+
+	fmt.Printf("%20s", "Average: ")
+	fmt.Printf("%.2f\n", float64(sum(rolls))/float64(len(rolls)))
+
+	fmt.Println("")
+	prompter.Prompt("Enter to Exit.", "")
 }
