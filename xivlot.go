@@ -21,7 +21,7 @@ func main() {
 		name = prompter.Prompt("Character Name", "Your Name")
 	}
 
-	regexPatterns := map[string]string{
+	regexpPatterns := map[string]string{
 		"JA": name + `は.*に(GREED|NEED)のダイスで(\d{1,3})を出した。.*$`,
 		"EN": `You roll (Greed|Need) on the .*\. (\d{1,3})!.*$`,
 	}
@@ -44,7 +44,7 @@ func main() {
 		scanner := bufio.NewScanner(f)
 
 		for scanner.Scan() {
-			r := regexp.MustCompile(regexPatterns[lang])
+			r := regexp.MustCompile(regexpPatterns[lang])
 			if r.MatchString(scanner.Text()) {
 				match := r.FindStringSubmatch(scanner.Text())
 				log.Print("Found: " + match[2])
