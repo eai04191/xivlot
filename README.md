@@ -6,7 +6,7 @@ Your Item Lot Roll Stats Viewer from ACT logs.
 
 ## Install
 
-Download `xivlot.exe` from Latest Release.
+Download `xivlot.exe` from [Latest Release](https://github.com/eai04191/xivlot/releases).
 
 ## Usage
 
